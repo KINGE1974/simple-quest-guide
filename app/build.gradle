@@ -1,0 +1,51 @@
+import java.util.Properties
+
+plugins { id 'com.android.application' }
+
+// Only the developer's local machine contains this file. Do not commit it to GitHub.
+def credentials = new Properties()
+def credentialsFile = rootProject.file('secrets.properties')
+if (credentialsFile.isFile()) {
+    credentialsFile.withInputStream { stream -> credentials.load(stream) }
+}
+def screenscraperDevId = credentials.getProperty('screenscraper.devUsername', '').trim()
+def screenscraperDevPassword = credentials.getProperty('screenscraper.devPassword', '').trim()
+if (screenscraperDevId.isEmpty() != screenscraperDevPassword.isEmpty()) {
+    throw new GradleException('Provide both ScreenScraper developer credentials in secrets.properties.')
+}
+// Correctly escape strings for generated Java BuildConfig source.
+def javaString = { String value ->
+    '"' + value.replace('\\', '\\\\').replace('"', '\\"')
+            .replace('\n', '\\n').replace('\r', '\\r') + '"'
+}
+
+android {
+    namespace 'jp.questpilot.app'
+    compileSdk 35
+    buildFeatures { buildConfig true }
+    defaultConfig {
+        applicationId 'jp.questpilot.app'
+        minSdk 26
+        targetSdk 28
+        versionCode 28
+        versionName '0.2.27'
+        buildConfigField 'String', 'SCREENSCRAPER_DEV_USERNAME', javaString(screenscraperDevId)
+        buildConfigField 'String', 'SCREENSCRAPER_DEV_PASSWORD', javaString(screenscraperDevPassword)
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+// A GitHub checkout without secrets can compile debug builds for UI development,
+// but must never accidentally produce a release with nonfunctional empty credentials.
+tasks.configureEach { task ->
+    if (task.name in ['preReleaseBuild', 'assembleRelease', 'bundleRelease']) {
+        task.doFirst {
+            if (screenscraperDevId.isEmpty() || screenscraperDevPassword.isEmpty()) {
+                throw new GradleException('Release requires secrets.properties with ScreenScraper developer credentials.')
+            }
+        }
+    }
+}
