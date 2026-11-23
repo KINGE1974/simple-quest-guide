@@ -44,8 +44,9 @@ Long-press a game in the library to **Edit** or **Delete** it. Deleting a game a
 
 ## Important notes about offline reading
 
+> **Some guide websites cannot be downloaded for offline use.** Download availability depends on the website's structure, scripts, and access restrictions. Even when saving succeeds, some pages, images, or links may not be available or work properly offline.
+
 - Offline saving is **per device**. Copies saved on a handheld are not automatically transferred to a phone, or vice versa.
-- Offline support depends on the target site's structure and access rules. Some pages, images, or linked content may not be saved or may not work offline.
 - A dimmed Offline button means that this device does not have a usable saved starting page for that guide.
 - Please respect each guide website's copyright and terms of use. Do not redistribute saved third-party pages or images without permission.
 
@@ -67,7 +68,19 @@ A debug build without developer credentials can still use core guide-library fea
 
 ## Screenshots
 
-Screenshots will be added using fictional sample games and original artwork to avoid including third-party game covers in the documentation.
+These are **illustrative sample images** using fictional game titles and original artwork. They show the general interface and features; some visual details may differ from the current app.
+
+### Grid view
+
+![Grid view with fictional game covers](screenshots/screenshot-grid-view.png)
+
+### List view
+
+![List view with fictional game covers](screenshots/screenshot-list-view.png)
+
+### Offline guide
+
+![Example offline guide page with fictional content](screenshots/screenshot-offline-guide.png)
 
 ## License
 
