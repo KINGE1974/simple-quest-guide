@@ -1,117 +1,76 @@
-# Simple Quest Guide — 0.2.27
+# Simple Quest Guide
 
-## What's new in 0.2.27
+**A lightweight Android app for organizing game walkthroughs and guides, built with handheld gaming devices and smartphones in mind.**
 
-- **Fix:** In list view, the OFF/LINE button now becomes blue after its own guide's
-  starting page is successfully saved offline. Previously, it stayed grey regardless
-  of the saved file, including after an app restart. The ON/LINE button is unchanged.
-- When the offline download cannot save its starting page because the site returns
-  HTTP 403/404/etc., the completion message shows the HTTP status. In that case the
-  offline button correctly remains disabled; it would be unsafe to pretend an
-  offline copy exists. No URL or credentials are shown in this error message.
-- The existing Duo/phone layouts, language options, grid buttons, image handling,
-  and bookmark storage are unchanged.
+[日本語 README](README_ja.md)
 
-## What changed in 0.2.26
+Simple Quest Guide keeps links to your favorite game guides in one place. Open them online or save supported pages for offline reading—useful when playing on a handheld device without switching apps constantly.
 
-- Landscape grid-view Offline/Online buttons use a slightly darker, less saturated blue (fill `#1B4268`, border `#396D9F`). Disabled colors and click behavior are unchanged. Size and 48dp touch areas are unchanged.
+**Current version:** 0.2.27 (beta)
 
-- **Landscape + grid (icon) view only:** two equally wide, 48dp-high localized buttons below each card: Offline (left) and Online (right).
-- The Offline button is disabled and visibly dimmed if no offline copy exists.
-- Tapping the cover or title continues to open the existing action dialog; long-press continues to show Edit / Delete.
-- The old Available offline status text is removed. Portrait grid view has no direct action buttons.
-- Rotation switches the layout automatically; list view is unchanged.
+## Features
 
-## Features carried forward from 0.2.22
+- **Your guide library:** Add games by title and HTTPS guide URL, then edit or delete them as needed.
+- **Recent guides:** Quickly return to recently opened guides.
+- **Grid and list views:** Switch between cover-based cards and compact rows.
+- **Portrait and landscape layouts:** Designed for Android phones and handhelds, including dual-screen devices such as the Retroid Pocket Duo.
+- **Online and offline reading:** Browse the original website online, or save available pages and images to the device for offline use.
+- **Clear offline availability:** The Offline button is enabled only when a saved starting page exists on that device.
+- **Cover artwork:** Choose an image from the device, rotate it, or search for artwork through ScreenScraper (account and API access required).
+- **Four interface languages:** Japanese, English, Simplified Chinese, and Korean.
 
-- The list view uses a **compact single row** for normal-length titles on phones and 4:3 handhelds. If a long title would be cramped on a narrow screen, the three controls automatically move to a small second row.
-- The cover maintains its aspect ratio/rotation; the title receives the remaining space (up to five lines for long titles on small phones).
-- The action area contains **three equal 48 × 48dp controls**: `OFF` / `LINE`, `ON` / `LINE`, and Edit.
-- ON/LINE uses a blue button to distinguish online access. OFF/LINE is grey; it is disabled and dimmed until an offline copy exists.
-- Buttons have full localized accessibility descriptions; their visible labels remain universal Latin OFF/LINE and ON/LINE for all four app languages.
-- Cover/title tapping, language choice, cover search/retry, and stored bookmarks are unchanged; long-press offers Edit / Delete.
+## Download and install
 
-## Manual tests for 0.2.26
+When a public beta APK is available, it will be listed under **[Releases](https://github.com/KINGE1974/simple-quest-guide/releases)**.
 
-1. Update over 0.2.21 without uninstalling; existing guides, cover rotations, offline copies and grid/list choice should persist.
-2. Switch to list view: each row shows cover + title + **OFF/LINE, ON/LINE, Edit** on one row when the title fits; long titles on a narrow phone may place the three buttons underneath.
-3. Verify each square control is 48dp tall/wide and all three fit without clipping on a narrow portrait phone, landscape phone and 4:3 Duo screen.
-4. Verify OFF/LINE is disabled until the page is saved for offline viewing, and ON/LINE always opens the regular guide URL.
-5. Tap Edit to update a game; tap the cover/title for the previous opening menu, and long-press for Edit / Delete.
-6. Check the new landscape grid buttons on a Duo and a phone, and confirm that portrait grid view stays uncluttered. The app icon, recent items, and image aspect ratios remain unchanged.
+1. Download the APK from a release's **Assets** section.
+2. Open the APK on your Android device and allow installation from that source if Android prompts you.
+3. Launch **Simple Quest Guide**.
 
-> NOTE: `secrets.properties` is NOT included; copy it from your existing project root. Android SDK/Studio build and device tests are not available in this environment, so this is a **source-level test build**.
+**Requirements:** Android 8.0 (API 26) or newer.
 
----
+> The GitHub source repository is not itself an installable app. Until an APK is published under Releases, you can build the project using Android Studio (see below).
 
-## ScreenScraper integration
+## Quick start
 
-- The APK includes an application-level ScreenScraper developer credential pair (`devid`, `devpassword`). The app user enters only **their own ScreenScraper member username/password** (`ssid`, `sspassword`) in **ScreenScraper settings**.
-- The member password is encrypted on the device using Android Keystore / AES-GCM. The member name is stored in app preferences. Clearing both inputs signs out the member.
-- **No shared proxy** is used, in accordance with the provider's answer.
-- Package art priority follows the in-app language: Japanese → JP; English → US/worldwide; Simplified Chinese → CN/Asia; Korean → KR/Asia. Other covers remain selectable.
-- The app uses `https://api.screenscraper.fr/api2/jeuRecherche.php` and downloads only the selected thumbnail images. Retrieved art can be saved to the device.
+1. Tap **+** to add a game.
+2. Enter the **game title** and an **HTTPS URL** for its guide.
+3. Optionally choose or search for cover artwork, then save the entry.
+4. Tap a game's cover or title to choose how to open it. In list view, use the **ON/LINE** and **OFF/LINE** buttons directly; landscape grid view also provides direct buttons.
+5. While viewing a guide online, tap **Save** and confirm to download supported pages and images for offline reading.
+6. Once the starting page has been saved successfully, **OFF/LINE** becomes available for that game **on the same device**.
 
-## Build in Android Studio
+Long-press a game in the library to **Edit** or **Delete** it. Deleting a game also removes its associated local cover and offline files.
 
-1. In this project folder, copy **`secrets.properties.example`** to **`secrets.properties`**.
-2. Open `secrets.properties` in a text editor and enter your ScreenScraper **developer** `Dev Username` and developer `Password` (not the debug password):
+## Important notes about offline reading
 
-   ```properties
-   screenscraper.devUsername=YOUR_DEV_USERNAME
-   screenscraper.devPassword=YOUR_DEV_PASSWORD
-   ```
+- Offline saving is **per device**. Copies saved on a handheld are not automatically transferred to a phone, or vice versa.
+- Offline support depends on the target site's structure and access rules. Some pages, images, or linked content may not be saved or may not work offline.
+- A dimmed Offline button means that this device does not have a usable saved starting page for that guide.
+- Please respect each guide website's copyright and terms of use. Do not redistribute saved third-party pages or images without permission.
 
-3. Open the project in Android Studio, sync Gradle, and run the app. Gradle embeds these values in the generated `BuildConfig` at build time. A debug build without secrets can still run the bookmark functions, but the search feature informs the developer that its app credentials are missing. Release builds reject missing credentials.
-4. On the device, open a bookmark editor > **ScreenScraper settings**, enter a *member* username and member password, and save. The developer fields are intentionally not shown.
-5. Search for `Sonic` or `Fire Emblem` and verify the correct region is prioritized for the selected UI language.
-6. Test bookmark updates, cover saving, offline saves, and reinstall/update behavior before distributing an APK. Updating an installed app requires an APK signed with the same signing key.
+## Cover search and ScreenScraper
 
-## Security / publication limitations
+Cover search uses the third-party **[ScreenScraper](https://www.screenscraper.fr/)** service. To use this feature, open **ScreenScraper settings** in the guide editor and enter your own ScreenScraper member account credentials. The service and its rate limits may affect search availability. You can use your own local image instead.
 
-**Important:** `secrets.properties` is ignored by Git and is not included in the ZIP. This protects the credentials from accidental **source-control** exposure only. Android APKs are inspectable: once you distribute an APK, its built-in developer ID and password must be considered extractable. Obfuscating `BuildConfig` or encrypting the value inside the APK does not solve this. Be prepared to request credential rotation, monitor misuse/quota, and confirm that the provider permits this distribution model.
+This project is not affiliated with or endorsed by ScreenScraper or any game publisher.
 
-The screenshots previously shared with visible credentials are not safe as public documentation. Reissue any accidentally exposed developer password **before public release**, and do not distribute builds containing the original credential.
+## Build from source
 
-**No actual developer or member credential is included in this public source ZIP.** Do not upload a filled `secrets.properties` or generated APK if you are not comfortable with its developer pair being extractable.
+1. Open this repository in **Android Studio**.
+2. For ScreenScraper cover search, copy `secrets.properties.example` to `secrets.properties` in the project root and supply **your own ScreenScraper developer credentials** as documented in the example file. Never commit this file.
+3. Let Gradle sync, then build and run a debug APK.
 
-## Notes for contributors
+A debug build without developer credentials can still use core guide-library features; ScreenScraper cover search will be unavailable. The current Gradle configuration requires developer credentials for release builds.
 
-- `secrets.properties` is ignored by `.gitignore`.
-- Build an APK locally using your own developer credentials for testing; a public GitHub source checkout alone has no ScreenScraper app credentials.
-- Do not commit signing keys, passwords, `.gradle/`, IDE files or generated build artifacts.
-- Use HTTPS for ScreenScraper requests; never write credential-bearing URLs into logs or error messages.
-- Gradle wrapper uses 8.9, compatible with Android Gradle Plugin 8.7.3.
-- The retry helper has been tested with plain Java, but this build environment has no Android SDK and has not produced or tested an APK. Use Android Studio and your device to validate before publishing.
+**Security notice for maintainers:** Developer credentials placed in `secrets.properties` are embedded in the generated APK and **may be extracted from a distributed APK**. Keeping the file out of Git protects the repository, **not** the released APK. Review ScreenScraper's distribution terms and credential strategy before publishing any release APK. Keep signing keys and passwords private.
 
-## Quick manual test checklist for 0.2.19
+## Screenshots
 
-1. Copy your local (uncommitted) `secrets.properties` to the new project root, sync Gradle, and build in Android Studio.
-2. Open an existing guide with a cover, press **Rotate left 90°**, then **Rotate right 90°**; the preview should return to the starting orientation, without cropping.
-3. Rotate once and press **Back** instead of **Save**; reopening should show the original saved orientation.
-4. Rotate once, press **Save**, then check **Library** and **Recent** cards. Reopen the editor and restart the app to confirm the orientation persists.
-5. Choose an entirely different image for the same guide; it should initially appear unrotated, then respond to the rotation buttons and save correctly.
-6. Create a guide without a cover; rotation controls must remain hidden until an image is selected.
-7. Verify that existing guides, URLs, downloaded offline pages, ScreenScraper login, search, and image aspect ratios are unchanged.
+Screenshots will be added using fictional sample games and original artwork to avoid including third-party game covers in the documentation.
 
-Rotation is stored as metadata; the original `cover-<id>.png` file is **not** rotated or recompressed unless the user explicitly chooses a new cover. This release is intended as a source-level test build: run Android Studio's Gradle build and device checks before any public release.
+## License
 
+Simple Quest Guide's original source code is released under the **[MIT License](LICENSE)**. The license does **not** grant rights to third-party game artwork, guide website content, or services.
 
-### Long press / delete
-
-Long-press a saved guide (both grid and list views) for **Edit / Delete**.
-A second confirmation is required for deletion, and the associated cover art
-and offline pages are removed. Guides being downloaded cannot be deleted until
-the download finishes. Existing entries are preserved when upgrading.
-
-## 0.2.26: 横画面アイコン表示の直接操作
-
-横画面でアイコン表示にすると、各カードの下に「オフライン」「オンライン」ボタンが出ます。未保存時の「オフライン」は無効です。縦画面とリスト表示の操作は従来どおりです。画像・タイトルをタップすると選択ダイアログ、長押しでは編集・削除を選択できます。
-
-## v0.2.26: 横画面アイコン表示のボタン調整
-
-横画面アイコン表示の2つの操作ボタンは、表示上の高さを38dpに縮め、48dpのタップ領域を維持します。オフライン保存済みの場合、オフラインボタンもオンラインボタンと同じ明るい青色になります。未保存時だけ背景と文字が暗くなり、押しても動作しません。オフライン保存データは**端末ごと**に保存されるため、別の端末で保存したものは自動的には共有されません。
-
-## v0.2.26: ボタンの色調整
-
-横画面のアイコン表示にある有効な「オフライン」「オンライン」ボタンの青を少し暗く変更しました。ボタンの大きさ・48dpのタップ領域・未保存時の暗色と無効状態は0.2.25と同じです。
+Contributions, bug reports, and suggestions are welcome through GitHub Issues.
